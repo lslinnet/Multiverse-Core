@@ -81,6 +81,14 @@ public class WorldManager implements MVWorldManager {
      */
     @Override
     public boolean addWorld(String name, Environment env, String seedString, String generator) {
+        return this.addWorld(name, env, seedString, generator, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean addWorld(String name, Environment env, String seedString, String generator, boolean useSpawnAdjust) {
         plugin.log(Level.FINE, "Adding world with: " + name + ", " + env.toString() + ", " + seedString + ", " + generator);
         Long seed = null;
         WorldCreator c = new WorldCreator(name);
@@ -128,7 +136,7 @@ public class WorldManager implements MVWorldManager {
             return false;
         }
 
-        MultiverseWorld mvworld = new MVWorld(world, this.configWorlds, this.plugin, this.plugin.getServer().getWorld(name).getSeed(), generator);
+        MultiverseWorld mvworld = new MVWorld(world, this.configWorlds, this.plugin, this.plugin.getServer().getWorld(name).getSeed(), generator, useSpawnAdjust);
         this.worldPurger.purgeWorld(null, mvworld);
         this.worlds.put(name, mvworld);
         if (this.unloadedWorlds.contains(name)) {
@@ -487,7 +495,7 @@ public class WorldManager implements MVWorldManager {
                 // Grab the initial values from the config file.
                 String environment = this.configWorlds.getString("worlds." + worldKey + ".environment", "NORMAL"); // Grab the Environment as a String.
                 String seedString = this.configWorlds.getString("worlds." + worldKey + ".seed", null);
-                if(seedString == null) {
+                if (seedString == null) {
                     seedString = this.configWorlds.getLong("worlds." + worldKey + ".seed") + "";
                 }
 

@@ -38,6 +38,20 @@ public interface MVWorldManager {
     public boolean addWorld(String name, Environment env, String seedString, String generator);
 
     /**
+     * Add a new World to the Multiverse Setup.
+     *
+     * @param name           World Name
+     * @param env            Environment Type
+     * @param seedString     The seed in the form of a string.
+     *                       If the seed is a Long,
+     *                       it will be interpreted as such.
+     * @param generator      The Custom generator plugin to use.
+     * @param useSpawnAdjust If true, multiverse will search for a safe spawn. If not, It will not modify the level.dat.
+     * @return True if the world is added, false if not.
+     */
+    public boolean addWorld(String name, Environment env, String seedString, String generator, boolean useSpawnAdjust);
+
+    /**
      * Remove the world from the Multiverse list, from the
      * config and deletes the folder.
      *
