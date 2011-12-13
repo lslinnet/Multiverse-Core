@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  * The implementation of the Multiverse-{@link Core}.
  */
 public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
-    private final static int Protocol = 9;
+    private final static int Protocol = 10;
     // Global Multiverse config variable, states whether or not
     // Multiverse should stop other plugins from teleporting players
     // to worlds.

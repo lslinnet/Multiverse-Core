@@ -10,6 +10,7 @@ package com.onarandombox.MultiverseCore.commands;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+import com.pneumaticraft.commandhandler.CommandHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class ImportCommand extends MultiverseCommand {
     public ImportCommand(MultiverseCore plugin) {
         super(plugin);
         this.setName("Import World");
-        this.setCommandUsage("/mv import" + ChatColor.GREEN + " {NAME} {ENV} " + ChatColor.GOLD + "[GENERATOR[:ID]]");
+        this.setCommandUsage("/mv import" + ChatColor.GREEN + " {NAME} {ENV} " + ChatColor.GOLD + " -g [GENERATOR[:ID]] [-n]");
         this.setArgRange(1, 3);
         this.addKey("mvimport");
         this.addKey("mvim");
@@ -112,10 +113,7 @@ public class ImportCommand extends MultiverseCommand {
             return;
         }
 
-        String generator = null;
-        if (args.size() == 3) {
-            generator = args.get(2);
-        }
+        String generator = CommandHandler.getFlag("-g", args);
 
         String env = args.get(1);
         Environment environment = this.plugin.getEnvFromString(env);
