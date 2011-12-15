@@ -24,13 +24,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -43,6 +37,7 @@ public class WorldManager implements MVWorldManager {
     private List<String> unloadedWorlds;
     private FileConfiguration configWorlds = null;
     private Map<String, String> defaultGens;
+    private String firstSpawn;
 
     public WorldManager(MultiverseCore core) {
         this.plugin = core;
@@ -194,6 +189,32 @@ public class WorldManager implements MVWorldManager {
             this.plugin.log(Level.INFO, "World '" + name + "' was already removed from config.yml");
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setFirstSpawnWorld(String world) {
+        if (world == null) {
+            this.firstSpawn = this.plugin.getServer().getWorlds().get(0).getName();
+        } else {
+            this.firstSpawn = world;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MultiverseWorld getFirstSpawnWorld() {
+        MultiverseWorld world = this.getMVWorld(this.firstSpawn);
+        if (world == null) {
+            // If the spawn world was unloaded, get the default world
+            this.plugin.log(Level.WARNING, "The world specified as the spawn world (" + this.firstSpawn + ") did not exist!!");
+            return this.getMVWorld(this.plugin.getServer().getWorlds().get(0));
+        }
+        return world;
     }
 
     /**
