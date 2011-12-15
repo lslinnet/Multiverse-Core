@@ -35,8 +35,6 @@ import java.util.logging.Level;
 
 /**
  * Public facing API to add/remove Multiverse worlds.
- *
- * @author fernferret, Rigby90
  */
 public class WorldManager implements MVWorldManager {
     private MultiverseCore plugin;

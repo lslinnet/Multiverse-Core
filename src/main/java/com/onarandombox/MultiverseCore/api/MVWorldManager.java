@@ -210,4 +210,18 @@ public interface MVWorldManager {
      * @return True if success, false if failure.
      */
     public boolean removeWorldFromConfig(String name);
+
+    /**
+     * Sets the initial spawn world for new players.
+     *
+     * @param world The World new players should spawn in.
+     */
+    public void setFirstSpawnWorld(String world);
+
+    /**
+     * Gets the world players should spawn in first.
+     *
+     * @return The {@link MultiverseWorld} new players should spawn in.
+     */
+    public MultiverseWorld getFirstSpawnWorld();
 }
