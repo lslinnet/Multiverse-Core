@@ -281,11 +281,11 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
      */
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
-        // pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Highest, this); // Low so it acts above any other.
         pm.registerEvent(Event.Type.PLAYER_TELEPORT, this.playerListener, Priority.Highest, this); // Cancel Teleports if needed.
         pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener, Priority.Normal, this); // To create the Player Session
         pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Priority.Normal, this); // To remove Player Sessions
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.playerListener, Priority.Low, this); // Let plugins which specialize in (re)spawning carry more weight.
+        pm.registerEvent(Event.Type.PLAYER_LOGIN, this.playerListener, Priority.Low, this); // Let plugins which specialize in (re)spawning carry more weight.
         pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Priority.Normal, this); // To prepend the world name
         pm.registerEvent(Event.Type.PLAYER_PORTAL, this.playerListener, Priority.Lowest, this); // To switch gamemode
         pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, this.playerListener, Priority.Monitor, this); // To switch gamemode
@@ -322,6 +322,8 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
         EnforceAccess = this.multiverseConfig.getBoolean("enforceaccess", false);
         EnforceGameModes = this.multiverseConfig.getBoolean("enforcegamemodes", true);
         PrefixChat = this.multiverseConfig.getBoolean("worldnameprefix", true);
+        // Default as the server.props world.
+        this.worldManager.setFirstSpawnWorld(this.multiverseConfig.getString("firstspawnworld", this.getServer().getWorlds().get(0).getName()));
         this.messaging = new MVMessaging(this);
         this.messaging.setCooldown(this.multiverseConfig.getInt("messagecooldown", 5000));
         this.saveMVConfigs();
