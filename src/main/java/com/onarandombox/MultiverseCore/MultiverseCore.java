@@ -57,6 +57,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
     public static boolean EnforceAccess;
     public static boolean EnforceGameModes;
     public static boolean PrefixChat;
+    public static boolean DisplayPermErrors;
     public static Map<String, String> teleportQueue = new HashMap<String, String>();
     private AnchorManager anchorManager = new AnchorManager(this);
 
@@ -324,6 +325,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
         PrefixChat = this.multiverseConfig.getBoolean("worldnameprefix", true);
         // Default as the server.props world.
         this.worldManager.setFirstSpawnWorld(this.multiverseConfig.getString("firstspawnworld", this.getServer().getWorlds().get(0).getName()));
+        DisplayPermErrors = this.multiverseConfig.getBoolean("displaypermerrors", true);
         this.messaging = new MVMessaging(this);
         this.messaging.setCooldown(this.multiverseConfig.getInt("messagecooldown", 5000));
         this.saveMVConfigs();
@@ -428,7 +430,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
         }
         ArrayList<String> allArgs = new ArrayList<String>(Arrays.asList(args));
         allArgs.add(0, command.getName());
-        return this.commandHandler.locateAndRunCommand(sender, allArgs);
+        return this.commandHandler.locateAndRunCommand(sender, allArgs, DisplayPermErrors);
     }
 
     /**
