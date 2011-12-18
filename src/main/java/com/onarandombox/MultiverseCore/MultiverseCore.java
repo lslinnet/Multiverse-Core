@@ -324,11 +324,24 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
         EnforceGameModes = this.multiverseConfig.getBoolean("enforcegamemodes", true);
         PrefixChat = this.multiverseConfig.getBoolean("worldnameprefix", true);
         // Default as the server.props world.
-        this.worldManager.setFirstSpawnWorld(this.multiverseConfig.getString("firstspawnworld", this.getServer().getWorlds().get(0).getName()));
+        this.worldManager.setFirstSpawnWorld(this.multiverseConfig.getString("firstspawnworld", getDefaultWorldName()));
         DisplayPermErrors = this.multiverseConfig.getBoolean("displaypermerrors", true);
         this.messaging = new MVMessaging(this);
         this.messaging.setCooldown(this.multiverseConfig.getInt("messagecooldown", 5000));
         this.saveMVConfigs();
+    }
+
+    /**
+     * Safely return a world name
+     * (The tests call this with no worlds loaded)
+     *
+     * @return The default world name.
+     */
+    private String getDefaultWorldName() {
+        if (this.getServer().getWorlds().size() > 0) {
+            return this.getServer().getWorlds().get(0).getName();
+        }
+        return "";
     }
 
     /**
