@@ -98,8 +98,12 @@ public class ImportCommand extends MultiverseCommand {
 
         if (worldName.toLowerCase().equals("--list") || worldName.toLowerCase().equals("-l")) {
             String worldList = this.getPotentialWorlds();
-            sender.sendMessage(ChatColor.AQUA + "====[ These look like worlds ]====");
-            sender.sendMessage(worldList);
+            if (worldList.length() > 2) {
+                sender.sendMessage(ChatColor.AQUA + "====[ These look like worlds ]====");
+                sender.sendMessage(worldList);
+            } else {
+                sender.sendMessage(ChatColor.RED + "No potential worlds found. Sorry!");
+            }
             return;
         }
         // Since we made an exception for the list, we have to make sure they have at least 2 params:
