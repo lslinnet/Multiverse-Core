@@ -107,15 +107,19 @@ public class ImportCommand extends MultiverseCommand {
             return;
         }
         // Since we made an exception for the list, we have to make sure they have at least 2 params:
+        // Note the exception is --list, which is covered above.
         if (args.size() == 1) {
             this.showHelp(sender);
             return;
         }
-        File worldFile = new File(this.plugin.getServer().getWorldContainer(), worldName);
-        if (this.worldManager.isMVWorld(worldName) && worldFile.exists()) {
-            sender.sendMessage(ChatColor.RED + "Multiverse already knows about this world!");
+
+        // Make sure we don't already know about this world.
+        if (this.worldManager.isMVWorld(worldName)) {
+            sender.sendMessage(ChatColor.GREEN + "Multiverse" + ChatColor.WHITE + " already knows about '" + ChatColor.AQUA + worldName + ChatColor.WHITE + "'!");
             return;
         }
+
+        File worldFile = new File(this.plugin.getServer().getWorldContainer(), worldName);
 
         String generator = CommandHandler.getFlag("-g", args);
         boolean useSpawnAdjust = true;
