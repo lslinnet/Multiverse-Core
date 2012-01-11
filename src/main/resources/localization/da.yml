@@ -1,0 +1,20 @@
+TEST_STRING: 'En test linje fra resourcen'
+
+# Generic Strings
+GENERIC_SORRY: 'Undskyld...'
+GENERIC_PAGE: 'Side'
+GENERIC_OF: 'af'
+GENERIC_UNLOADED: 'UNLOADED'
+GENERIC_PLUGIN_DISABLED: 'Dette plugin er sl√et fra!'
+
+# Errors
+ERROR_LOAD: 'Din konfiguration blev ej indl√st. Multiverse funktionalitet vil v√re meget begr√nset.'
+
+
+## Commands
+# List Command
+LIST_NAME: 'Listning af verdener'
+LIST_DESC: 'Viser en liste af alle verdener som du har adgang til.'
+LIST_TITLE: 'Multiverse Verdens Liste'
+LIST_NO_MATCH: 'Ingen verden passede p√ dit valgte filter:'
+
