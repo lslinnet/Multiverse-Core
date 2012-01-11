@@ -10,5 +10,5 @@ enforceaccess: true
 displaypermerrors: true
 teleportintercept: true
 firstspawnoverride: true
-messagecooldown: 5000
+locale: en
 version: 2.7

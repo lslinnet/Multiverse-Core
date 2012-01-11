@@ -27,6 +27,10 @@ import com.onarandombox.MultiverseCore.listeners.MVPlayerListener;
 import com.onarandombox.MultiverseCore.listeners.MVPluginListener;
 import com.onarandombox.MultiverseCore.listeners.MVPortalAdjustListener;
 import com.onarandombox.MultiverseCore.listeners.MVWeatherListener;
+import com.onarandombox.MultiverseCore.localization.MessageProvider;
+import com.onarandombox.MultiverseCore.localization.MessageProviding;
+import com.onarandombox.MultiverseCore.localization.MultiverseMessage;
+import com.onarandombox.MultiverseCore.localization.SimpleMessageProvider;
 import com.onarandombox.MultiverseCore.utils.AnchorManager;
 import com.onarandombox.MultiverseCore.utils.DebugLog;
 import com.onarandombox.MultiverseCore.utils.MVMessaging;
@@ -56,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
@@ -64,7 +69,7 @@ import java.util.logging.Logger;
 /**
  * The implementation of the Multiverse-{@link Core}.
  */
-public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
+public class MultiverseCore extends JavaPlugin implements MVPlugin, Core, MessageProviding {
     private static final int PROTOCOL = 10;
     // Global Multiverse config variable, states whether or not
     // Multiverse should stop other plugins from teleporting players
@@ -80,6 +85,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
     public static int GlobalDebug = 0;
 
     private AnchorManager anchorManager = new AnchorManager(this);
+    private MessageProvider messageProvider = new SimpleMessageProvider(this);
 
     /**
      * This method is used to find out who is teleporting a player.
@@ -244,11 +250,18 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
         // this function will be called every time a plugin registers a new envtype with MV
         // Setup & Load our Configuration files.
         loadConfigs();
+        try {
+            this.messageProvider.setLocale(new Locale(multiverseConfig.getString("locale", "en")));
+        } catch (IllegalArgumentException e) {
+            this.log(Level.SEVERE, e.getMessage());
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         if (this.multiverseConfig != null) {
             this.worldManager.loadDefaultWorlds();
             this.worldManager.loadWorlds(true);
         } else {
-            this.log(Level.SEVERE, "Your configs were not loaded. Very little will function in Multiverse.");
+            this.log(Level.SEVERE, this.getMessageProvider().getMessage(MultiverseMessage.ERROR_LOAD));
         }
         this.anchorManager.loadAnchors();
 
@@ -277,6 +290,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
                 return true;
             }
         } catch (Throwable t) {
+            //TODO: Deal with this. It's bad.
         }
         LOGGER.info(String.format("%s - Version %s was NOT ENABLED!!!", LOG_TAG, this.getDescription().getVersion()));
         LOGGER.info(String.format("%s A plugin that has loaded before %s has an incompatible version of AllPay (an internal library)!",
@@ -294,6 +308,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
                 return true;
             }
         } catch (Throwable t) {
+            //TODO: Deal with this. It's bad.
         }
         LOGGER.info(String.format("%s - Version %s was NOT ENABLED!!!", LOG_TAG, this.getDescription().getVersion()));
         LOGGER.info(String.format("%s A plugin that has loaded before %s has an incompatible version of CommandHandler (an internal library)!",
@@ -489,7 +504,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         if (!this.isEnabled()) {
-            sender.sendMessage("This plugin is Disabled!");
+            sender.sendMessage(this.getMessageProvider().getMessage(MultiverseMessage.GENERIC_PLUGIN_DISABLED));
             return true;
         }
         ArrayList<String> allArgs = new ArrayList<String>(Arrays.asList(args));
@@ -532,7 +547,7 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
      * standard Server Console.
      *
      * @param level The Log-{@link Level}
-     * @param msg The message
+     * @param msg   The message
      */
     public static void staticDebugLog(Level level, String msg) {
         LOGGER.log(level, "[MVCore-Debug] " + msg);
@@ -838,6 +853,25 @@ public class MultiverseCore extends JavaPlugin implements MVPlugin, Core {
     @Override
     public AnchorManager getAnchorManager() {
         return this.anchorManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MessageProvider getMessageProvider() {
+        return messageProvider;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMessageProvider(MessageProvider provider) {
+        if (provider == null)
+            throw new IllegalArgumentException("The new provider can't be null!");
+
+        messageProvider = provider;
     }
 
 }
